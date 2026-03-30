@@ -31,6 +31,13 @@ function createPawn(root, pawns, startX, startZ, material, step = 1) {
     }
 }
 
+function createPairs(root, startX, startZ, material){
+    switch(root.name){
+        case 'bishopRoot':
+            
+    }
+}
+
 
 export async function loadPieces(scene) {
     // Materials for pieces
@@ -50,16 +57,16 @@ export async function loadPieces(scene) {
     pawnRoot.setEnabled(false); //hide root, we will clone it for each pawn
 
     //const pawn = await loadPiece(scene, "pawn.glb", new BABYLON.Vector3(-3.5,0.6,-2.5), redMat);
-    const bishop = await loadPiece(scene, "bishop.glb");
+    const bishopRoot = await loadPiece(scene, "bishop.glb");
     bishop.getChildMeshes().forEach(mesh => {
             mesh.material = mRed;
         });
     // const knight = await loadPiece(scene, "knight.glb", new BABYLON.Vector3(-1.5,0.6,-2.5), redMat);
-    const rook = await loadPiece(scene, "rook.glb");
+    const rookRoot = await loadPiece(scene, "rook.glb");
     rook.getChildMeshes().forEach(mesh => {
             mesh.material = mRed;
         });
-    const queen = await loadPiece(scene, "queen.glb");
+    const queenRoot = await loadPiece(scene, "queen.glb");
     queen.getChildMeshes().forEach(mesh => {
             mesh.material = mRed;
         });
