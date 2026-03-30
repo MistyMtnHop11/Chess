@@ -1,4 +1,4 @@
-import { Chess } from "https://cdn.skypack.dev/chess.js";
+import { Chess } from "https://esm.sh/chess.js";
 
 export const game = new Chess();
 

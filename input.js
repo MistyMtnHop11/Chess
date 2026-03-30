@@ -1,10 +1,9 @@
 export function setupInput(scene, onTileClick) {
-    scene.onPointObservable.add((pointerInfo) => {
-        if (pointerInfo.pickInfo.hit) {
-            const mesh = pointerInfo.pickInfo.pickedMesh;
-            if (mesh.name.startsWith("tile_")) {
-                onTileClick(mesh);
-            }
-        }
-    });
-}
+    scene.onPointerObservable.add((pointerInfo) => {
+        if (pointerInfo.type !== 1) return;
+        if(!pointerInfo.pickInfo.hit) return;
+        const mesh = pointerInfo.pickInfo.pickedMesh;
+        if (!mesh || !mesh.name.startsWith("tile_")) return;
+        onTileClick(mesh);
+    });    
+};
