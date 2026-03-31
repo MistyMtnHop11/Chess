@@ -6,6 +6,12 @@ let rowStart = -3.5;
 let redRowStart = -2.5;
 let blueRowStart = 2.5;
 
+const Pieces = Object.freeze({
+    KNIGHT: 'knight',
+    BISHOP: 'bishop',
+    ROOK: 'rook'
+}); 
+
 async function loadPiece(scene, fileName) {
     const result = await BABYLON.SceneLoader.ImportMeshAsync("", "models/", fileName, scene);
     return result.meshes[0];
@@ -31,11 +37,49 @@ function createPawn(root, pawns, startX, startZ, material, step = 1) {
     }
 }
 
-function createPairs(root, startX, startZ, material){
-    switch(root.name){
-        case 'bishopRoot':
-            
+function createPairs(Pieces, root, bishops, startX, startZ, material){
+    
+    switch(Pieces)
+    {
+        case ('bishop'):
+            const bishop1 = root.clone(`bishop${material.name}1`);
+            bishop1.position = new BABYLON.Vector3( startX, 0.60, startZ);
+            bishop1.scaling  = new BABYLON.Vector3(BISHOP_SCALE, BISHOP_SCALE, BISHOP_SCALE);
+            bishop1.getChildMeshes().forEach(mesh => {
+                mesh.material = material;
+            });
+
+            const bishop2 = root.clone(`bishop${material.name}2`);
+            bishop2.position = new BABYLON.Vector3(startX*-1, .60, startZ);
+            bishop2.scaling = new BABYLON.Vector3(BISHOP_SCALE,BISHOP_SCALE,BISHOP_SCALE);
+            bishop2.getChildMeshes().forEach(mesh => {
+                mesh.material = material;
+            });
+
+            bishops.push(bishop1);
+            bishops.push(bishop2);
+            console.log("bishop case");
+        case ('knight'):
+            const knight1 = root.clone(`knight${material.name}1`);
+            knight1.position = new BABYLON.Vector3( startX, 0.60, startZ);
+            knight1.scaling  = new BABYLON.Vector3(BISHOP_SCALE, BISHOP_SCALE, BISHOP_SCALE);
+            knight1.getChildMeshes().forEach(mesh => {
+                mesh.material = material;
+            });
+
+            const knight2 = root.clone(`knight${material.name}2`);
+            knight2.position = new BABYLON.Vector3(startX*-1, .60, startZ);
+            knight2.scaling = new BABYLON.Vector3(BISHOP_SCALE,BISHOP_SCALE,BISHOP_SCALE);
+            knight2.getChildMeshes().forEach(mesh => {
+                mesh.material = material;
+            });
+
+            bishops.push(knight1);
+            bishops.push(knight2);
+            console.log("knight case");
     }
+    
+    
 }
 
 
@@ -47,47 +91,57 @@ export async function loadPieces(scene) {
     mBlue.diffuseColor = new BABYLON.Color3(0,0,1);
 
     const pawnRoot = await loadPiece(scene, "pawn.glb");
+    const bishopRoot = await loadPiece(scene, "bishop.glb");
+    const knightRoot = await loadPiece(scene, "knight.glb");
+    
+    const bishops = new Array();
     const pawns = new Array();
 
 
     createPawn(pawnRoot, pawns, rowStart, redRowStart, mRed, 1);
     createPawn(pawnRoot, pawns, rowStart, blueRowStart, mBlue, 1);
-
+    createPairs('bishop', bishopRoot,bishops, -2.5, -3.5, mRed);
+    createPairs('bishop', bishopRoot,bishops, -2.5, 3.5, mBlue);
+    createPairs('knight', knightRoot, bishops, 1.5, -3.5, mRed);
     
     pawnRoot.setEnabled(false); //hide root, we will clone it for each pawn
+    bishopRoot.setEnabled(false);
+    knightRoot.setEnabled(false);
 
     //const pawn = await loadPiece(scene, "pawn.glb", new BABYLON.Vector3(-3.5,0.6,-2.5), redMat);
-    const bishopRoot = await loadPiece(scene, "bishop.glb");
-    bishop.getChildMeshes().forEach(mesh => {
-            mesh.material = mRed;
-        });
-    // const knight = await loadPiece(scene, "knight.glb", new BABYLON.Vector3(-1.5,0.6,-2.5), redMat);
-    const rookRoot = await loadPiece(scene, "rook.glb");
-    rook.getChildMeshes().forEach(mesh => {
-            mesh.material = mRed;
-        });
-    const queenRoot = await loadPiece(scene, "queen.glb");
-    queen.getChildMeshes().forEach(mesh => {
-            mesh.material = mRed;
-        });
+    // bishopRoot.getChildMeshes().forEach(mesh => {
+    //         mesh.material = mRed;
+    //     });
+    // const knightRoot = await loadPiece(scene, "knight.glb");
+    // knightRoot.getChildMeshes().forEach(mesh => {
+    //         mesh.material = mRed;
+    //     });
+    // const rookRoot = await loadPiece(scene, "rook.glb");
+    // rookRoot.getChildMeshes().forEach(mesh => {
+    //         mesh.material = mRed;
+    //     });
+    // const queenRoot = await loadPiece(scene, "queen.glb");
+    // queenRoot.getChildMeshes().forEach(mesh => {
+    //         mesh.material = mRed;
+    //     });
     // const king = await loadPiece(scene, "king.glb", new BABYLON.Vector3(1.5,0.6,-2.5), redMat); 
 
     //pawn.rotation = BABYLON.Vector3.Zero();
 
     //pawn.scaling = new BABYLON.Vector3(PAWN_SCALE, PAWN_SCALE, PAWN_SCALE);
-    bishop.scaling = new BABYLON.Vector3(BISHOP_SCALE, BISHOP_SCALE, BISHOP_SCALE);
-    rook.scaling = new BABYLON.Vector3(ROOK_SCALE, ROOK_SCALE, ROOK_SCALE);
-    queen.scaling = new BABYLON.Vector3(QUEEN_SCALE, QUEEN_SCALE, QUEEN_SCALE);
+    // bishop.scaling = new BABYLON.Vector3(BISHOP_SCALE, BISHOP_SCALE, BISHOP_SCALE);
+    // rook.scaling = new BABYLON.Vector3(ROOK_SCALE, ROOK_SCALE, ROOK_SCALE);
+    // queen.scaling = new BABYLON.Vector3(QUEEN_SCALE, QUEEN_SCALE, QUEEN_SCALE);
 
-    //pawn.position = new BABYLON.Vector3(-3.5,0.35,-2.5);
-    bishop.position = new BABYLON.Vector3(-1.5,0.60,-3.5);
-    queen.position = new BABYLON.Vector3(-0.5,0.75,-3.5);
-    rook.position = new BABYLON.Vector3(-3.5, 0.35, -3.5);
+    // //pawn.position = new BABYLON.Vector3(-3.5,0.35,-2.5);
+    // //bishop.position = new BABYLON.Vector3(-1.5,0.60,-3.5);
+    // queen.position = new BABYLON.Vector3(-0.5,0.75,-3.5);
+    // rook.position = new BABYLON.Vector3(-3.5, 0.35, -3.5);
 
 
     // result.meshes.forEach(mesh => { //apply color to result.meshes
     //     mesh.material = redMat;
     // });
 
-    return {pawns, bishop, rook, queen};
+    return {pawns, bishops};
 }
