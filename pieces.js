@@ -63,6 +63,7 @@ function createPairs(Pieces, root, bishops, startX, startZ, material){
             const knight1 = root.clone(`knight${material.name}1`);
             knight1.position = new BABYLON.Vector3( startX, 0.60, startZ);
             knight1.scaling  = new BABYLON.Vector3(BISHOP_SCALE, BISHOP_SCALE, BISHOP_SCALE);
+            knight1.rotation = new BABYLON.Vector3(0, Math.PI*2, 0); //rotate knight to face correct direction
             knight1.getChildMeshes().forEach(mesh => {
                 mesh.material = material;
             });
@@ -70,6 +71,7 @@ function createPairs(Pieces, root, bishops, startX, startZ, material){
             const knight2 = root.clone(`knight${material.name}2`);
             knight2.position = new BABYLON.Vector3(startX*-1, .60, startZ);
             knight2.scaling = new BABYLON.Vector3(BISHOP_SCALE,BISHOP_SCALE,BISHOP_SCALE);
+            knight2.rotation = new BABYLON.Vector3(0, Math.PI *2, 0); //rotate knight to face correct direction
             knight2.getChildMeshes().forEach(mesh => {
                 mesh.material = material;
             });
